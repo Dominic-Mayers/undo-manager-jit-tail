@@ -1,0 +1,22 @@
+{
+  "name": "undo-manager-jit-tail",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "",
+  "main": "src/undo-manager-jit-tail.js",
+  "exports": {
+    ".": "./src/undo-manager-jit-tail.js"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Dominic Mayers",
+  "license": "ISC",
+  "dependencies": {
+    "undo-manager": "^1.1.1"
+  }
+}
