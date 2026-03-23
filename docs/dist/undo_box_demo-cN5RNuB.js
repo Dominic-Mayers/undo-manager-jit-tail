@@ -10,7 +10,7 @@ import {
     atTail,
     undoManager,
     getIncomingForwardCommand
-} from "./undo-manager-jit-tail/undo-manager-jit-tail.js";
+} from from "undo-manager-jit-tail";
 
 const currentEl = document.getElementById("current-box");
 const canonicalEl = document.getElementById("canonical-box");
