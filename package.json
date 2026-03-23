@@ -2,22 +2,26 @@
   "name": "@dominic.mayers/undo-manager-jit-tail",
   "version": "0.1.0",
   "type": "module",
-  "description": "",
-  "main": "src/undo-manager-jit-tail.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Dominic-Mayers/undo-manager-jit-tail.git"
-  },
+  "description": "JIT-tail wrapper around undo-manager",
+  "main": "./src/undo-manager-jit-tail.js",
   "exports": {
     ".": "./src/undo-manager-jit-tail.js"
   },
-  "directories": {
-    "doc": "docs"
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dominic-Mayers/undo-manager-jit-tail.git"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
+  "keywords": [
+    "undo",
+    "undo-manager",
+    "history",
+    "redo",
+    "jit"
+  ],
   "author": "Dominic Mayers",
   "license": "ISC",
   "dependencies": {
