@@ -1,7 +1,3 @@
-Here is the updated **README.md**, corrected and ready to paste:
-
----
-
 # undo-manager-jit-tail
 
 A history manager that groups minor changes into a single checkpoint just in time, avoiding the creation of too many checkpoints.
@@ -89,7 +85,7 @@ This preserves some undoability while keeping history compact.
 
 ## 🔁 Checkpoint Economy
 
-The module implements a **two-stage checkpoint economy**:
+The module helps to reduce the number of checkpoints in two ways:
 
 ### 1. Just-in-time checkpointing
 
