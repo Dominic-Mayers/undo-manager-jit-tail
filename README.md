@@ -128,20 +128,6 @@ Only one meaningful tail checkpoint is kept:
 
 ---
 
-## 📊 Conceptual Model
-
-```
- Incoming forward                      Outgoing forward
- aka: Incoming redo   ┌─────────────┐  aka: Outgoing redo
-────────────────────► │ Current /   │ ──────────────────►
-                      │ normalised  │
-◄──────────────────── │ checkpoint  │ ◄──────────────────
- Outgoing backward    └─────────────┘  Incoming backward
- aka: Outgoing undo                    aka: Incoming undo
-```
-
----
-
 ## 🧩 Synchronization Model
 
 The module maintains a **sync flag**:
@@ -176,12 +162,43 @@ The application is responsible for:
 
 Advanced usage may require understanding:
 
-* `getCurrentCommand()`
-* `getPreviousCommand()`
+* `getIncomingForwardCommand()`
+* `getOutgoingBackwardCommand()`
+* `getIncomingBackwardCommand()`
+* `getOutgoingForwardCommand()`
 
 to construct appropriate checkpoint commands.
 
 ---
+
+## 📊 Conceptual Model
+
+These getters are defined relative to the current semantic checkpoint, 
+not necessarily the raw checkpoint at the current history index.
+
+```
+ Incoming forward                      Outgoing forward
+ aka: Incoming redo   ┌─────────────┐  aka: Outgoing redo
+────────────────────► │ Current /   │ ──────────────────►
+                      │ normalised  │
+◄──────────────────── │ checkpoint  │ ◄──────────────────
+ Outgoing backward    └─────────────┘  Incoming backward
+ aka: Outgoing undo                    aka: Incoming undo
+```
+---
+
+When a checkpoint is created, the SPA is still at the previous checkpoint.
+So the checkpoint pair being constructed is for the next checkpoint.
+
+A common situation is that the incoming-forward command of the current
+checkpoint is also the outgoing-backward command, that is, the undo command,
+of the checkpoint being created.
+
+If the current checkpoint must be normalized, the raw checkpoint at the current
+history index is not the valid semantic checkpoint relative to the checkpoint
+being created. You do not need to handle that manually: it is already taken
+into account by getIncomingForwardCommand(), getOutgoingBackwardCommand(),
+and the other semantic getters.
 
 ## 🧠 Key Insight
 
