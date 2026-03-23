@@ -11,7 +11,11 @@ keeping history clean and meaningful.
 
 ## 🚀 Live Demo
 
-👉 https://dominic-mayers.github.io/undo-manager-jit-tail/
+👉 **Hello World demo:** https://dominic-mayers.github.io/undo-manager-jit-tail/hello-world-demo.html
+
+---
+
+👉 **Full demo:** https://dominic-mayers.github.io/undo-manager-jit-tail/
 
 The demo is the best way to understand the module.
 
@@ -58,7 +62,7 @@ import {
   getPreviousCommand,
   logStateHist,
   undoManager
-} from "undo-manager-jit-tail";
+} from "@dominic.mayers/undo-manager-jit-tail";
 ```
 
 ### Main functions
@@ -69,6 +73,82 @@ import {
 * `unSyncHist()` → mark history as unsynchronized 
 * `isSyncHist()` → check synchronization state
 * `atTail()` → check if at tail position
+
+---
+
+## ⚡ Minimal Example
+
+This module manages **history checkpoints**, not application state itself.
+
+A payload is an application-defined value (most commonly a function)
+that represents how to undo or redo a change.
+
+The application defines the payloads stored in history and executes
+the payload returned by `undoHist()` or `redoHist()`.
+
+Here is the simplest possible usage:
+
+
+```js
+import {
+  initHist,
+  executeHist,
+  undoHist,
+  redoHist
+} from "@dominic.mayers/undo-manager-jit-tail";
+
+let value = 0;
+
+function setValue(next) {
+  value = next;
+  console.log("value =", value);
+}
+
+initHist();
+
+// Declare a checkpoint for 0 → 1
+executeHist(
+  () => setValue(0), // undo payload
+  () => setValue(1)  // redo payload
+);
+
+// Apply the change in the application
+setValue(1);
+
+// Ask history for the undo payload, then execute it
+undoHist()?.(); // value = 0
+
+// Ask history for the redo payload, then execute it
+redoHist()?.(); // value = 1
+```
+
+---
+
+### 🧪 Try it in the browser console
+
+You can run the same example directly in the browser:
+
+1. Open a blank page (`about:blank`)
+2. Replace the import line with:
+
+```js
+const {
+  initHist,
+  executeHist,
+  undoHist,
+  redoHist
+} = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail@0.1.2");
+```
+
+3. Run the rest of the example unchanged
+
+---
+
+### 💡 Notes
+
+* `executeHist(undo, redo)` stores application-defined payloads
+* `undoHist()` / `redoHist()` return payloads — they do not execute them
+* Payloads are application-defined (functions, snapshots, commands, etc.)
 
 ---
 
