@@ -1,5 +1,5 @@
 {
-  "name": "undo-manager-jit-tail",
+  "name": "@dominic-mayers/undo-manager-jit-tail",
   "version": "0.1.0",
   "type": "module",
   "description": "",
