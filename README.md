@@ -67,38 +67,6 @@ import {
 
 ---
 
-## 🧠 Core Idea
-
-The module distinguishes between:
-
-* **major changes** → stored as checkpoints
-* **minor changes** → accumulated outside history
-
-Instead of creating a checkpoint for every minor change, the module:
-
-* accumulates minor changes
-* creates **one checkpoint just in time** when an undo occurs
-
-This preserves some undoability while keeping history compact.
-
----
-
-## 🔁 Checkpoint Economy
-
-The module helps to reduce the number of checkpoints in two ways:
-
-### 1. Just-in-time checkpointing
-
-Minor changes are grouped into a single checkpoint only when needed (typically on undo).
-
-### 2. Tail normalization (optional)
-
-* Past tails are removed (ephemeral mode). Only one tail checkpoint is kept.
-
-* Past tails are preserved (persistent mode).
-
----
-
 ## 🧩 Synchronization Model
 
 The module maintains a **sync flag**:
@@ -142,7 +110,7 @@ to construct appropriate checkpoint commands.
 
 ---
 
-## 📊 Conceptual Model
+### 📊 Conceptual Model
 
 These getters are defined relative to the current semantic checkpoint, 
 not necessarily the raw checkpoint at the current history index.
@@ -165,11 +133,11 @@ A common situation is that the incoming-forward command of the current
 checkpoint is also the outgoing-backward command, that is, the undo command,
 of the checkpoint being created.
 
-If the current checkpoint must be normalized, the raw checkpoint at the current
-history index is not the valid semantic checkpoint relative to the checkpoint
-being created. You do not need to handle that manually: it is already taken
-into account by getIncomingForwardCommand(), getOutgoingBackwardCommand(),
-and the other semantic getters.
+When you create a checkpoint at tail, that tail might be removed and the index
+decremented. In that case. the tail checkpoint is not the valid semantic checkpoint
+relative to the new checkpoint being created. You do not need to handle that
+manually: it is already taken into account by getIncomingForwardCommand(),
+getOutgoingBackwardCommand() and the other semantic getters.
 
 ---
 
