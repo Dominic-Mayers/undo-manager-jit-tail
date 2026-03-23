@@ -1,9 +1,13 @@
 {
-  "name": "@dominic-mayers/undo-manager-jit-tail",
+  "name": "@dominic.mayers/undo-manager-jit-tail",
   "version": "0.1.0",
   "type": "module",
   "description": "",
   "main": "src/undo-manager-jit-tail.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dominic-Mayers/undo-manager-jit-tail.git"
+  },
   "exports": {
     ".": "./src/undo-manager-jit-tail.js"
   },
