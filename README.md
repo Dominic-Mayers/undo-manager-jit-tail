@@ -4,7 +4,7 @@ Here is the updated **README.md**, corrected and ready to paste:
 
 # undo-manager-jit-tail
 
-A history manager that groups minor changes into a single checkpoint just in time, avoiding checkpoint spam while preserving undoability.
+A history manager that groups minor changes into a single checkpoint just in time, avoiding the creation of too many checkpoints.
 
 ---
 
@@ -48,35 +48,26 @@ import {
   unSyncHist,
   isSyncHist,
   atTail,
-  undoManager,
-  getIncomingForwardCommand
-} from 'undo-manager-jit-tail';
+  getTailMode,
+  getIncomingForwardCommand,
+  getOutgoingBackwardCommand,
+  getIncomingBackwardCommand,
+  getOutgoingForwardCommand,
+  getCurrentCommand,
+  getPreviousCommand,
+  logStateHist,
+  undoManager
+} from "undo-manager-jit-tail";
 ```
 
 ### Main functions
 
-* `initHist(command)` → initialize history
-* `executeHist(command)` → apply a command and create a checkpoint
+* `initHist(initialRedoCmd?, tailMode?)` → initialize history
+* `executeHist({initTail})` → create a checkpoint using (undo, redo) returned by initTail.
 * `undoHist()` / `redoHist()` → navigate history
-* `unSyncHist()` → mark state as modified outside history
+* `unSyncHist()` → mark history as unsynchronized 
 * `isSyncHist()` → check synchronization state
 * `atTail()` → check if at tail position
-
----
-
-## ⚡ Minimal Example
-
-```js
-initHist(initialCommand);
-
-executeHist(commandA);
-
-// minor changes outside history
-unSyncHist();
-
-// this will create a tail checkpoint if needed
-undoHist();
-```
 
 ---
 
@@ -92,7 +83,7 @@ Instead of creating a checkpoint for every minor change, the module:
 * accumulates minor changes
 * creates **one checkpoint just in time** when an undo occurs
 
-This preserves undoability while keeping history compact.
+This preserves some undoability while keeping history compact.
 
 ---
 
@@ -106,25 +97,9 @@ Minor changes are grouped into a single checkpoint only when needed (typically o
 
 ### 2. Tail normalization (optional)
 
-Only one meaningful tail checkpoint is kept:
+* Past tails are removed (ephemeral mode). Only one tail checkpoint is kept.
 
-* past tails can be removed (ephemeral mode)
-* or preserved (persistent mode)
-
----
-
-## 🔀 Tail Modes
-
-### Persistent tails
-
-* every generated tail checkpoint remains in history
-* history contains all previously created tail checkpoints
-
-### Ephemeral tails
-
-* only the current tail is kept
-* past tails are normalized away
-* history remains compact
+* Past tails are preserved (persistent mode).
 
 ---
 
@@ -199,20 +174,6 @@ history index is not the valid semantic checkpoint relative to the checkpoint
 being created. You do not need to handle that manually: it is already taken
 into account by getIncomingForwardCommand(), getOutgoingBackwardCommand(),
 and the other semantic getters.
-
-## 🧠 Key Insight
-
-The module does **not** aim to track every change.
-
-Instead, it ensures that:
-
-> minor changes are preserved when they matter, not when they happen
-
-This results in:
-
-* fewer checkpoints
-* clearer history
-* preserved undo semantics
 
 ---
 
