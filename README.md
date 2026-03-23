@@ -1,12 +1,17 @@
 # undo-manager-jit-tail
+[![npm version](https://img.shields.io/npm/v/@dominic.mayers/undo-manager-jit-tail)](https://www.npmjs.com/package/@dominic.mayers/undo-manager-jit-tail)
 
-A history manager that groups minor changes into a single checkpoint just in time, avoiding the creation of too many checkpoints.
+A history manager for applications where frequent small changes should not
+create a large number of undo checkpoints.
+
+It groups multiple minor changes into a single checkpoint **just before an undo occurs**,
+keeping history clean and meaningful.
 
 ---
 
 ## 🚀 Live Demo
 
-👉 [https://dominic-mayers.github.io/undo-manager-jit-tail/](https://dominic-mayers.github.io/undo-manager-jit-tail/)
+👉 https://dominic-mayers.github.io/undo-manager-jit-tail/
 
 The demo is the best way to understand the module.
 
@@ -26,7 +31,7 @@ The demo also allows switching between:
 ## 📦 Installation
 
 ```bash
-npm install undo-manager-jit-tail
+npm install @dominic.mayers/undo-manager-jit-tail
 ```
 
 ---
@@ -69,7 +74,7 @@ import {
 
 ## 🧩 Synchronization Model
 
-The module maintains a **sync flag**:
+The module maintains a **synchronization flag**:
 
 * `sync = true` → visible state matches history
 * `sync = false` → state has diverged (minor changes)
@@ -112,7 +117,7 @@ to construct appropriate checkpoint commands.
 
 ### 📊 Conceptual Model
 
-These getters are defined relative to the current semantic checkpoint, 
+These getters are defined relative to the current semantic checkpoint,
 not necessarily the raw checkpoint at the current history index.
 
 ```
@@ -134,7 +139,7 @@ checkpoint is also the outgoing-backward command, that is, the undo command,
 of the checkpoint being created.
 
 When you create a checkpoint at tail, that tail might be removed and the index
-decremented. In that case. the tail checkpoint is not the valid semantic checkpoint
+decremented. In that case, the tail checkpoint is not the valid semantic checkpoint
 relative to the new checkpoint being created. You do not need to handle that
 manually: it is already taken into account by getIncomingForwardCommand(),
 getOutgoingBackwardCommand() and the other semantic getters.
