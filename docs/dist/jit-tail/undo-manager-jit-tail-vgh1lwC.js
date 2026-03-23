@@ -32,16 +32,11 @@ export function unSyncHist() {
 }
 
 export function initHist(initialRedoCmd = async () => {}, tailModeArg = "ephemeral") {
-
     if (tailModeArg !== "ephemeral" && tailModeArg !== "persistent") {
         throw new Error("initHistGeneric: tailMode must be 'ephemeral' or 'persistent'");
     }
 
     tailMode = tailModeArg;
-
-    if (typeof initialRedoCmd !== "function") {
-        throw new Error("initHistGeneric: initialRedoCmd must be a function");
-    }
 
     undoManager.clear();
 
@@ -50,15 +45,14 @@ export function initHist(initialRedoCmd = async () => {}, tailModeArg = "ephemer
         throw new Error("initHistGeneric: undoManager.clear() failed to reset history");
     }
 
-    const undo = function () {};
-    undo.cmd = async () => {
+    const initialUndoPayload = async () => {
         throw new Error("Initial checkpoint cannot be undone");
     };
 
-    const redo = function () {};
-    redo.cmd = initialRedoCmd;
-
-    undoManager.add({ undo, redo });
+    undoManager.add({
+        undo: toInternalCommand(initialUndoPayload),
+        redo: toInternalCommand(initialRedoCmd)
+    });
 
     sync = true;
     hasTail = false;
@@ -76,13 +70,14 @@ export function redoHist() {
     }
 
     const command = getRedoCommand();
-    if (!command?.redo?.cmd) {
-        throw new Error("redoHist: current redo.cmd is missing");
+    if (!command?.redo || !("cmd" in command.redo)) {
+        throw new Error("redoHist: current redo payload is missing");
     }
 
     undoManager.redo();
     sync = true;
-    logStateHist('redoHist: ');
+    logStateHist("redoHist: ");
+
     return command.redo.cmd;
 }
 
@@ -92,36 +87,24 @@ export function undoHist({ initTail } = {}) {
         return null;
     }
 
-    // If the visible state is dirty, first capture it as a JIT tail.
     if (!sync) {
         if (typeof initTail !== "function") {
             throw new Error("undoHist: initTail is required when state is not synchronized");
         }
 
         const tail = initTail();
-        const { undo, redo } = tail ?? {};
 
-        if (typeof undo !== "function") {
-            throw new Error("undoHist: initTail() must return an undo function");
-        }
-        if (typeof redo !== "function") {
-            throw new Error("undoHist: initTail() must return a redo function");
-        }
-        if (typeof undo.cmd !== "function") {
-            throw new Error("undoHist: tail undo.cmd is missing");
-        }
-        if (typeof redo.cmd !== "function") {
-            throw new Error("undoHist: tail redo.cmd is missing");
+        if (!tail || typeof tail !== "object" || !("undo" in tail) || !("redo" in tail)) {
+            throw new Error("undoHist: initTail() must return { undo, redo }");
         }
 
+        const { undo, redo } = tail;
         addCheckpoint(undo, redo, true);
     }
 
-    // After the optional tail insertion, the current entry is exactly the one
-    // that ordinary undo must undo.
     const commandToUndo = getCurrentCommand();
-    if (!commandToUndo?.undo?.cmd) {
-        throw new Error("undoHist: effective undo.cmd is missing");
+    if (!commandToUndo?.undo || !("cmd" in commandToUndo.undo)) {
+        throw new Error("undoHist: effective undo payload is missing");
     }
 
     undoManager.undo();
@@ -141,6 +124,16 @@ export function canUndoHist() {
 
 export function canRedoHist() {
     return sync && undoManager.hasRedo();
+}
+
+function toInternalCommand(payload) {
+    if ( payload && typeof payload === "function" && "cmd" in payload) {
+        return payload;
+    }
+
+    const wrapped = function () {};
+    wrapped.cmd = payload;
+    return wrapped;
 }
 
 function getSemanticIndex() {
@@ -195,23 +188,19 @@ function getRedoCommand() {
     return commands[index + 1] ?? null;
 }
 
-
 function addCheckpoint(undo, redo, isTail) {
-    if (!undo || typeof undo !== "function") {
-        throw new Error("addCheckpoint: undo must be a function");
-    }
-    if (!redo || typeof redo !== "function") {
-        throw new Error("addCheckpoint: redo must be a function");
-    }
-
     if (tailMode === "ephemeral" && atTail()) {
         undoManager.undo();
         hasTail = false;
     }
-    
-    undoManager.add({undo, redo});
+
+    undoManager.add({
+        undo: toInternalCommand(undo),
+        redo: toInternalCommand(redo)
+    });
+
     hasTail = (tailMode === "ephemeral") && isTail;
-    sync = true; 
+    sync = true;
 }
 
 function isAtInitialCheckpoint() {
