@@ -57,10 +57,10 @@ import {
 ```
 
 ### Main functions
-
 * `initHist(initialRedoCmd?, tailMode?)` → initialize history
-* `executeHist({initTail})` → create a checkpoint using (undo, redo) returned by initTail.
-* `undoHist()` / `redoHist()` → navigate history
+* `executeHist(undo, redo)` → create a checkpoint using (undo, redo).
+* `undoHist({initTail})` → navigate history + create tail checkpoint using initTail
+* `redoHist()` → navigate history
 * `unSyncHist()` → mark history as unsynchronized 
 * `isSyncHist()` → check synchronization state
 * `atTail()` → check if at tail position
