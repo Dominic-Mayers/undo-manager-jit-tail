@@ -106,19 +106,16 @@ function setValue(next) {
 
 initHist();
 
-// Declare a checkpoint for 0 → 1
+// Create the checkpoint, move to it, get its redo payload, execute it
 executeHist(
-  () => setValue(0), // undo payload
-  () => setValue(1)  // redo payload
-);
+  () => setValue(0),
+  () => setValue(1)
+)?.(); // value = 1
 
-// Apply the change in the application
-setValue(1);
-
-// Ask history for the undo payload, then execute it
+// Move backward in history, get the undo payload, execute it
 undoHist()?.(); // value = 0
 
-// Ask history for the redo payload, then execute it
+// Move forward in history, get the redo payload, execute it
 redoHist()?.(); // value = 1
 ```
 
