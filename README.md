@@ -137,7 +137,7 @@ const {
   executeHist,
   undoHist,
   redoHist
-} = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail@0.1.2");
+} = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail@0.1.3");
 ```
 
 3. Run the rest of the example unchanged
