@@ -201,22 +201,22 @@ These getters are defined relative to the current semantic checkpoint,
 not necessarily the raw checkpoint at the current history index.
 
 ```
- Incoming forward                      Outgoing forward
- aka: Incoming redo   ┌─────────────┐  aka: Outgoing redo
+ Incoming forward
+ aka: (usual) redo    ┌─────────────┐  Outgoing forward
 ────────────────────► │ Current /   │ ──────────────────►
                       │ normalised  │
 ◄──────────────────── │ checkpoint  │ ◄──────────────────
  Outgoing backward    └─────────────┘  Incoming backward
- aka: Outgoing undo                    aka: Incoming undo
+ aka: (usual) undo
 ```
 ---
 
 When a checkpoint is created, the SPA is still at the previous checkpoint.
 So the checkpoint pair being constructed is for the next checkpoint.
 
-A common situation is that the incoming-forward command of the current
-checkpoint is also the outgoing-backward command, that is, the undo command,
-of the checkpoint being created.
+A common situation is that the incoming-forward or redo command of the
+current checkpoint is also the outgoing-backward or undo command of the
+checkpoint being created.
 
 When you create a checkpoint at tail, that tail might be removed and the index
 decremented. In that case, the tail checkpoint is not the valid semantic checkpoint
