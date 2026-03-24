@@ -146,9 +146,10 @@ const {
 
 ### 💡 Notes
 
-* `executeHist(undo, redo)` stores application-defined payloads
-* `undoHist()` / `redoHist()` return payloads — they do not execute them
-* Payloads are application-defined (functions, snapshots, commands, etc.)
+* `executeHist(undo, redo)` → create a checkpoint, move to it, and return its redo payload
+* `undoHist({ initTail })` → move backward and return the undo payload
+    * `initTail` (optional) → callback used when history is unsynchronized; must return a checkpoint `{ undo, redo }`
+* `redoHist()` → move forward and return the redo payload
 
 ---
 
