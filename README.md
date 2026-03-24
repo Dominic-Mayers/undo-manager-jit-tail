@@ -134,10 +134,11 @@ const {
   executeHist,
   undoHist,
   redoHist
-} = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail@0.1.6");
+} = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail");
 ```
-
 3. Run the rest of the example unchanged
+
+Note : This example imports the latest published version of the module from a CDN, which may differ from the current npm package version.
 
 ---
 
