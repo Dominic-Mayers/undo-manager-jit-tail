@@ -45,7 +45,7 @@ npm install @dominic.mayers/undo-manager-jit-tail
 ```js
 import {
   initHist,
-  executeHist,
+  doHist,
   undoHist,
   redoHist,
   canUndoHist,
@@ -67,7 +67,7 @@ import {
 
 ### Main functions
 * `initHist(initialRedoCmd?, tailMode?)` → initialize history
-* `executeHist(undo, redo)` → create a checkpoint using (undo, redo).
+* `doHist(undo, redo)` → create a checkpoint using (undo, redo).
 * `undoHist({initTail})` → navigate history + create tail checkpoint using initTail
 * `redoHist()` → navigate history
 * `unSyncHist()` → mark history as unsynchronized 
@@ -84,13 +84,13 @@ A payload is an application-defined value (most commonly a function)
 that represents how to undo or redo a change.
 
 The application defines the payloads stored in history and executes
-the payload returned by `undoHist()`, `redoHist()` or `executeHist()`.[^1]
+the payload returned by `undoHist()`, `redoHist()` or `doHist()`.[^1]
 
 > [!TIP]
 > You decide what synchronization with history means.
 > You choose the payload when creating a checkpoint and use a returned payload according to what best suits your application.
 
-[^1]: The payload redo that is provided as an argument to executeHist() is returned
+[^1]: The payload redo that is provided as an argument to doHist() is returned
 to allow a similar usage as with undoHist() and redoHist().
 
 Here is the simplest possible usage:
@@ -99,7 +99,7 @@ Here is the simplest possible usage:
 ```js
 import {
   initHist,
-  executeHist,
+  doHist,
   undoHist,
   redoHist
 } from "@dominic.mayers/undo-manager-jit-tail";
@@ -114,7 +114,7 @@ function setValue(next) {
 initHist();
 
 // Create the checkpoint, move to it, get its redo payload, execute it
-executeHist(
+doHist(
   () => setValue(0),
   () => setValue(1)
 )?.(); // value = 1
@@ -138,7 +138,7 @@ You can run the same example directly in the browser:
 ```js
 const {
   initHist,
-  executeHist,
+  doHist,
   undoHist,
   redoHist
 } = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail");
@@ -151,7 +151,7 @@ Note : This example imports the latest published version of the module from a CD
 
 ### 💡 Notes
 
-* `executeHist(undo, redo)` → create a checkpoint, move to it, and return its redo payload
+* `doHist(undo, redo)` → create a checkpoint, move to it, and return its redo payload
 * `undoHist({ initTail })` → move backward and return the undo payload
     * `initTail` (optional) → callback used when history is unsynchronized; must return a checkpoint `{ undo, redo }`
 * `redoHist()` → move forward and return the redo payload
@@ -174,7 +174,7 @@ unSyncHist();
 Synchronization is restored by:
 
 * `initHist`
-* `executeHist`
+* `doHist`
 * `undoHist`
 * `redoHist`
 
