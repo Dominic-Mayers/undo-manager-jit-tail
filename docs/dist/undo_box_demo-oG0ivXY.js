@@ -1,6 +1,6 @@
 import {
     initHist,
-    executeHist,
+    doHist,
     undoHist,
     redoHist,
     canUndoHist,
@@ -138,7 +138,7 @@ function getMode(kind) {
 
 function applyMajorChange(after) {
     const { undo, redo } = buildCanonicalCheckpointPairFromSemanticCurrent(after);
-    executeHist(undo, redo);
+    doHist(undo, redo);
     canonicalState = cloneState(after);
     render();
 }
