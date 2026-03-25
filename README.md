@@ -84,7 +84,14 @@ A payload is an application-defined value (most commonly a function)
 that represents how to undo or redo a change.
 
 The application defines the payloads stored in history and executes
-the payload returned by `undoHist()` or `redoHist()`.
+the payload returned by `undoHist()`, `redoHist()` or `executeHist()`.[^1]
+
+> [!TIP]
+> You decide what synchronization with history means.
+> You choose the payload when creating a checkpoint and use a returned payload according to what best suits your application.
+
+[^1]: The payload redo that is provided as an argument to executeHist() is returned
+to allow a similar usage as with undoHist() and redoHist().
 
 Here is the simplest possible usage:
 
