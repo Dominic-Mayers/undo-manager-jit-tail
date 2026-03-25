@@ -4,13 +4,10 @@
   "type": "module",
   "description": "JIT-tail wrapper around undo-manager",
   
-  // 1. Explicit ESM entry point for older tools and CDNs
   "module": "./src/undo-manager-jit-tail.js",
   
-  // 2. Main entry point (fallback)
   "main": "./src/undo-manager-jit-tail.js",
   
-  // 3. Browser-specific entry point
   "browser": "./src/undo-manager-jit-tail.js",
 
   "exports": {
@@ -18,7 +15,6 @@
       "import": "./src/undo-manager-jit-tail.js",
       "default": "./src/undo-manager-jit-tail.js"
     },
-    // 4. Critical: Allow tools to read your package metadata
     "./package.json": "./package.json"
   },
   "files": [
