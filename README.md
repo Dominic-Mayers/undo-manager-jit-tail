@@ -138,7 +138,7 @@ const {
 ```
 3. Run the rest of the example unchanged
 
-Note : This example imports the latest published version of the module from a CDN, which may differ from the current npm package version.
+Note : This example imports the latest published version of the module from a CDN, which may not match with the version of that README.md file.
 
 ---
 
