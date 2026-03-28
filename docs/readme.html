@@ -36,34 +36,33 @@
         const data = await res.json();
 
         const versions = Object.keys(data.versions).sort(compareVersions);
+
         const latest = data["dist-tags"].latest;
 
         let target;
 
-        if (version === latest) {
-          // current version → main
+        if (compareVersions(version, latest) >= 0) {
+          // current or later → main
           target = `https://github.com/${repo}/blob/main/README.md`;
         } else {
-          // find next version
-          const index = versions.indexOf(version);
+          // find first version strictly greater than requested
+          const nextVersion = versions.find(v => compareVersions(v, version) > 0);
 
-          if (index === -1 || index === versions.length - 1) {
-            document.body.innerText = "Version not found or no next version.";
+          if (!nextVersion) {
+            document.body.innerText = "No next version found.";
             return;
           }
 
-          const nextVersion = versions[index + 1];
           target = `https://github.com/${repo}/blob/v${nextVersion}/README.md`;
         }
 
         window.location.href = target;
 
-      } catch (e) {
-        document.body.innerText = "Error fetching npm data.";
-        console.error(e);
-      }
+        } catch (e) {
+          document.body.innerText = "Error fetching npm data.";
+          console.error(e);
+        }    
     }
-
     redirect();
   </script>
 </body>
