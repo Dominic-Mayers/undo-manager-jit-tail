@@ -86,6 +86,9 @@ that represents how to undo or redo a change.
 The application defines the payloads stored in history and executes
 the payload returned by `undoHist()`, `redoHist()` or `doHist()`.[^1]
 
+> [!NOTE]
+> Payloads are typically related (at capture time or after being returned) to mutable application state. Application code should ensure that state changes do not affect stored history entries through reference sharing.
+
 > [!TIP]
 > You decide what synchronization with history means.
 > You choose the payload when creating a checkpoint and use a returned payload according to what best suits your application.
