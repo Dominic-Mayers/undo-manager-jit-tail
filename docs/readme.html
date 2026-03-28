@@ -42,32 +42,17 @@
           const data = await res.json();
           const versions = Object.keys(data.versions).sort(compareVersions);
 
-          // Placeholder or malformed request should already have been handled earlier,
-          // but we stay defensive here.
           if (!version || version === "__VERSION__") {
             window.location.href = `https://github.com/${repo}/blob/main/README.md`;
             return;
           }
 
-          // In normal use, mode=last expects a real published npm version.
           if (mode === "last") {
-            if (!versions.includes(version)) {
-              document.body.innerHTML = `
-        <h2>Unknown version</h2>
-        <p>The requested version <code>${version}</code> is not a published npm version of <code>${npmPackage}</code>.</p>
-        <ul>
-          <li><a href="https://github.com/${repo}/blob/main/README.md">Latest documentation</a></li>
-          <li><a href="https://www.npmjs.com/package/${encodeURIComponent(npmPackage)}">npm package page</a></li>
-        </ul>
-      `;
-              return;
-            }
-
             const nextVersion = versions.find(
               (v) => compareVersions(v, version) > 0,
             );
 
-            // last(V) = next(V) if it exists, otherwise main
+            // Core rule: if the version ahead does not exist, redirect to main
             if (!nextVersion) {
               window.location.href = `https://github.com/${repo}/blob/main/README.md`;
               return;
@@ -83,6 +68,7 @@
               return;
             }
 
+            // Discrepancy only when npm has the version but GitHub does not
             document.body.innerHTML = `
       <h2>Documentation discrepancy</h2>
       <p>
@@ -105,12 +91,9 @@
           }
 
           // Fallback when mode is missing or unknown: offer choices, no redirect.
-          let html = `<h2>Documentation options</h2>`;
-
-          const versionExists = versions.includes(version);
-          const nextVersion = versionExists
-            ? versions.find((v) => compareVersions(v, version) > 0)
-            : null;
+          const nextVersion = versions.find(
+            (v) => compareVersions(v, version) > 0,
+          );
 
           const lastTarget = nextVersion
             ? `https://github.com/${repo}/blob/v${nextVersion}/README.md`
@@ -119,7 +102,8 @@
           const exactTarget = `https://github.com/${repo}/blob/v${version}/README.md`;
           const latestTarget = `https://github.com/${repo}/blob/main/README.md`;
 
-          html += `
+          document.body.innerHTML = `
+    <h2>Documentation options</h2>
     <p>Missing or unknown mode parameter. Please choose:</p>
     <ul>
       <li><strong><a href="${lastTarget}">Documentation for this version (recommended)</a></strong></li>
@@ -127,8 +111,6 @@
       <li><a href="${latestTarget}">Latest documentation</a></li>
     </ul>
   `;
-
-          document.body.innerHTML = html;
         } catch (e) {
           console.error(e);
           document.body.innerHTML = `
