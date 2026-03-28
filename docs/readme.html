@@ -2,10 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Redirecting...</title>
+  <title>Documentation redirect</title>
 </head>
 <body>
-  <p>Redirecting to documentation...</p>
+  <p>Resolving documentation…</p>
 
   <script>
     const repo = "dominic-mayers/undo-manager-jit-tail";
@@ -22,12 +22,14 @@
       return 0;
     }
 
-    async function redirect() {
+    async function resolve() {
       const params = new URLSearchParams(window.location.search);
       const version = params.get("v");
+      const mode = params.get("mode");
 
-      if (!version) {
-        document.body.innerText = "Missing version (?v=...)";
+      // Placeholder or missing version → fallback to main
+      if (!version || version === "__VERSION__") {
+        window.location.href = `https://github.com/${repo}/blob/main/README.md`;
         return;
       }
 
@@ -37,33 +39,55 @@
 
         const versions = Object.keys(data.versions).sort(compareVersions);
 
-        const latest = data["dist-tags"].latest;
-
-        let target;
-
-        if (compareVersions(version, latest) >= 0) {
-          // current or later → main
-          target = `https://github.com/${repo}/blob/main/README.md`;
-        } else {
-          // find first version strictly greater than requested
+        // --- Normal mode ---
+        if (mode === "last") {
           const nextVersion = versions.find(v => compareVersions(v, version) > 0);
 
-          if (!nextVersion) {
-            document.body.innerText = "No next version found.";
-            return;
+          let target;
+
+          if (nextVersion) {
+            target = `https://github.com/${repo}/blob/v${nextVersion}/README.md`;
+          } else {
+            target = `https://github.com/${repo}/blob/main/README.md`;
           }
 
-          target = `https://github.com/${repo}/blob/v${nextVersion}/README.md`;
+          window.location.href = target;
+          return;
         }
 
-        window.location.href = target;
+        // --- Fallback (mode missing or unknown) ---
+        let html = `<h2>Documentation options</h2>`;
 
-        } catch (e) {
-          document.body.innerText = "Error fetching npm data.";
-          console.error(e);
-        }    
+        const nextVersion = versions.find(v => compareVersions(v, version) > 0);
+
+        const lastTarget = nextVersion
+          ? `https://github.com/${repo}/blob/v${nextVersion}/README.md`
+          : `https://github.com/${repo}/blob/main/README.md`;
+
+        const exactTarget = `https://github.com/${repo}/blob/v${version}/README.md`;
+        const latestTarget = `https://github.com/${repo}/blob/main/README.md`;
+
+        html += `
+          <p>Missing or unknown mode parameter. Please choose:</p>
+          <ul>
+            <li><strong><a href="${lastTarget}">Documentation for this version (recommended)</a></strong></li>
+            <li><a href="${exactTarget}">Documentation at version ${version}</a></li>
+            <li><a href="${latestTarget}">Latest documentation</a></li>
+          </ul>
+        `;
+
+        document.body.innerHTML = html;
+
+      } catch (e) {
+        console.error(e);
+        document.body.innerHTML = `
+          <p>Error fetching npm data.</p>
+          <p><a href="https://github.com/${repo}/blob/main/README.md">Go to latest documentation</a></p>
+        `;
+      }
     }
-    redirect();
+
+    resolve();
   </script>
 </body>
 </html>

@@ -21,13 +21,16 @@
     "type": "git",
     "url": "git+https://github.com"
   },
+  "scripts": {
+                "prepublishOnly": "node scripts/update-readme-link.js"
+  },
   "keywords": [
     "undo",
     "undo-manager",
     "history",
     "redo",
     "jit"
-  ],
+  ],  
   "author": "Dominic Mayers",
   "license": "ISC",
   "dependencies": {
