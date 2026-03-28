@@ -63,9 +63,7 @@ function main() {
     "m"
   );
 
-  const managedBlock = `${START_MARKER}
-[![docs-last ${version}](https://img.shields.io/badge/docs-last%20${version}-blue?logo=github)](${SITE_URL}?mode=last&v=${version})
-${END_MARKER}`;
+  const managedBlock = `${START_MARKER}[![README-last of ${version}](https://img.shields.io/badge/README-last%20of%20${version}-blue?logo=github)](${SITE_URL}?mode=last&v=${version})${END_MARKER}`;
 
   const updated = readme.replace(blockRegex, managedBlock);
 
