@@ -17,7 +17,7 @@
   <script type="module">
     const {
       initHist,
-      executeHist,
+      doHist,
       undoHist,
       redoHist
     } = await import("https://esm.sh/@dominic.mayers/undo-manager-jit-tail");
@@ -42,7 +42,7 @@
       const before = value;
       const after = value + 1;
 
-      executeHist(
+      doHist(
         () => setValue(before),
         () => setValue(after)
       )?.();
