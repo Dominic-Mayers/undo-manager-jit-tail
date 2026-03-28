@@ -1,6 +1,6 @@
 {
   "name": "@dominic.mayers/undo-manager-jit-tail",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "type": "module",
   "description": "JIT-tail wrapper around undo-manager",
   "module": "./src/undo-manager-jit-tail.js",
@@ -22,7 +22,7 @@
     "url": "git+https://github.com"
   },
   "scripts": {
-                "prepublishOnly": "node scripts/update-readme-link.js"
+    "prepublishOnly": "node scripts/update-readme-link.js"
   },
   "keywords": [
     "undo",
@@ -30,7 +30,7 @@
     "history",
     "redo",
     "jit"
-  ],  
+  ],
   "author": "Dominic Mayers",
   "license": "ISC",
   "dependencies": {
