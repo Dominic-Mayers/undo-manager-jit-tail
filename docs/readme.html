@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecting...</title>
+</head>
+<body>
+  <p>Redirecting to documentation...</p>
+
+  <script>
+    const repo = "dominic-mayers/undo-manager-jit-tail";
+    const npmPackage = "@dominic.mayers/undo-manager-jit-tail";
+
+    function compareVersions(a, b) {
+      const pa = a.split('.').map(Number);
+      const pb = b.split('.').map(Number);
+      for (let i = 0; i < 3; i++) {
+        if ((pa[i] || 0) !== (pb[i] || 0)) {
+          return (pa[i] || 0) - (pb[i] || 0);
+        }
+      }
+      return 0;
+    }
+
+    async function redirect() {
+      const params = new URLSearchParams(window.location.search);
+      const version = params.get("v");
+
+      if (!version) {
+        document.body.innerText = "Missing version (?v=...)";
+        return;
+      }
+
+      try {
+        const res = await fetch(`https://registry.npmjs.org/${npmPackage}`);
+        const data = await res.json();
+
+        const versions = Object.keys(data.versions).sort(compareVersions);
+        const latest = data["dist-tags"].latest;
+
+        let target;
+
+        if (version === latest) {
+          // current version → main
+          target = `https://github.com/${repo}/blob/main/README.md`;
+        } else {
+          // find next version
+          const index = versions.indexOf(version);
+
+          if (index === -1 || index === versions.length - 1) {
+            document.body.innerText = "Version not found or no next version.";
+            return;
+          }
+
+          const nextVersion = versions[index + 1];
+          target = `https://github.com/${repo}/blob/v${nextVersion}/README.md`;
+        }
+
+        window.location.href = target;
+
+      } catch (e) {
+        document.body.innerText = "Error fetching npm data.";
+        console.error(e);
+      }
+    }
+
+    redirect();
+  </script>
+</body>
+</html>
