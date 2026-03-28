@@ -6,15 +6,30 @@ const path = require("path");
 const README_PATH = path.join(process.cwd(), "README.md");
 const PACKAGE_PATH = path.join(process.cwd(), "package.json");
 
-const PLACEHOLDER = "__VERSION__";
+const START_MARKER = "<!-- DOC-LINK-START -->";
+const END_MARKER = "<!-- DOC-LINK-END -->";
 
-function fail(msg) {
-  console.error(`❌ ${msg}`);
+const SITE_URL =
+  "https://dominic-mayers.github.io/undo-manager-jit-tail/readme.html";
+
+function fail(message) {
+  console.error(`❌ ${message}`);
   process.exit(1);
 }
 
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function readJson(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf8"));
+  } catch (err) {
+    fail(`Could not read ${path.basename(filePath)}: ${err.message}`);
+  }
+}
+
 function main() {
-  // Vérifications de base
   if (!fs.existsSync(README_PATH)) {
     fail("README.md not found");
   }
@@ -23,30 +38,43 @@ function main() {
     fail("package.json not found");
   }
 
-  const pkg = JSON.parse(fs.readFileSync(PACKAGE_PATH, "utf8"));
+  const pkg = readJson(PACKAGE_PATH);
   const version = pkg.version;
 
-  if (!version) {
-    fail("package.json has no version field");
+  if (!version || typeof version !== "string") {
+    fail("package.json has no valid version field");
   }
 
-  let readme = fs.readFileSync(README_PATH, "utf8");
+  const readme = fs.readFileSync(README_PATH, "utf8");
 
-  const occurrences = (readme.match(new RegExp(PLACEHOLDER, "g")) || []).length;
+  const startCount = (readme.match(new RegExp(escapeRegExp(START_MARKER), "g")) || []).length;
+  const endCount = (readme.match(new RegExp(escapeRegExp(END_MARKER), "g")) || []).length;
 
-  if (occurrences === 0) {
-    fail(`No placeholder "${PLACEHOLDER}" found in README.md`);
+  if (startCount === 0 || endCount === 0) {
+    fail(`Managed documentation block not found. Expected markers ${START_MARKER} and ${END_MARKER}`);
   }
 
-  if (occurrences > 1) {
-    fail(`Multiple placeholders "${PLACEHOLDER}" found in README.md`);
+  if (startCount !== 1 || endCount !== 1) {
+    fail("Managed documentation block markers must each appear exactly once");
   }
 
-  const updated = readme.replace(PLACEHOLDER, version);
+  const blockRegex = new RegExp(
+    `${escapeRegExp(START_MARKER)}[\\s\\S]*?${escapeRegExp(END_MARKER)}`,
+    "m"
+  );
+
+  const managedBlock = `${START_MARKER}
+[![docs-last ${version}](https://img.shields.io/badge/docs-last%20${version}-blue?logo=github)](${SITE_URL}?mode=last&v=${version})
+${END_MARKER}`;
+
+  const updated = readme.replace(blockRegex, managedBlock);
+
+  if (updated === readme) {
+    fail("README.md was not updated");
+  }
 
   fs.writeFileSync(README_PATH, updated);
-
-  console.log(`✅ README updated with version ${version}`);
+  console.log(`✅ README documentation badge updated to version ${version}`);
 }
 
 main();
