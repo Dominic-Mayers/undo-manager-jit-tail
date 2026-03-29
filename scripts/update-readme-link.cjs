@@ -10,7 +10,7 @@ const START_MARKER = "<!-- DOC-LINK-START -->";
 const END_MARKER = "<!-- DOC-LINK-END -->";
 
 const SITE_URL =
-  "https://dominic-mayers.github.io/undo-manager-jit-tail/readme.html";
+  "https://dominic-mayers.github.io/undo-manager-jit-tail/readme-resolver.html";
 
 function fail(message) {
   console.error(`❌ ${message}`);
