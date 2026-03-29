@@ -42,11 +42,6 @@
           const data = await res.json();
           const versions = Object.keys(data.versions).sort(compareVersions);
 
-          if (!version || version === "__VERSION__") {
-            window.location.href = `https://github.com/${repo}/blob/main/README.md`;
-            return;
-          }
-
           if (mode === "last") {
             const nextVersion = versions.find(
               (v) => compareVersions(v, version) > 0,
