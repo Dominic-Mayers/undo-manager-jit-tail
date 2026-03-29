@@ -1,6 +1,6 @@
 {
   "name": "@dominic.mayers/undo-manager-jit-tail",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "type": "module",
   "description": "JIT-tail wrapper around undo-manager",
   "module": "./src/undo-manager-jit-tail.js",
