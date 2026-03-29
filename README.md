@@ -1,5 +1,5 @@
 # undo-manager-jit-tail
-[![npm version](https://img.shields.io/npm/v/@dominic.mayers/undo-manager-jit-tail)](https://www.npmjs.com/package/@dominic.mayers/undo-manager-jit-tail) <!-- DOC-LINK-START --><a href="https://dominic-mayers.github.io/undo-manager-jit-tail/readme-resolver.html?mode=last&pkg=@dominic.mayers/undo-manager-jit-tail&repo=dominic-mayers/undo-manager-jit-tail&v=0.1.12"><img alt="README-last of 0.1.12" src="https://img.shields.io/badge/README-last%20of%200.1.12-blue?logo=github"></a><!-- DOC-LINK-END -->
+[![npm version](https://img.shields.io/npm/v/@dominic.mayers/undo-manager-jit-tail)](https://www.npmjs.com/package/@dominic.mayers/undo-manager-jit-tail) <!-- DOC-LINK-START --><a href="https://dominic-mayers.github.io/undo-manager-jit-tail/readme-resolver.html?mode=last&pkg=@dominic.mayers/undo-manager-jit-tail&repo=dominic-mayers/undo-manager-jit-tail&v=0.1.13"><img alt="README-last of 0.1.13" src="https://img.shields.io/badge/README-last%20of%200.1.13-blue?logo=github"></a><!-- DOC-LINK-END -->
 
 A history manager for applications where frequent small changes should not
 create a large number of undo checkpoints.
