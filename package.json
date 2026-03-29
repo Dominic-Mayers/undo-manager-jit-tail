@@ -13,6 +13,10 @@
     },
     "./package.json": "./package.json"
   },
+  "scripts": {
+        "prepublishOnly": "node scripts/update-readme-link.cjs"
+        "postversion": "git push --follow-tags"
+  },
   "files": [
     "src",
     "README.md"
