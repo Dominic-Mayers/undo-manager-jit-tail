@@ -1,6 +1,6 @@
 {
   "name": "@dominic.mayers/undo-manager-jit-tail",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "type": "module",
   "description": "JIT-tail wrapper around undo-manager",
   "module": "./src/undo-manager-jit-tail.js",
@@ -14,8 +14,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-        "prepublishOnly": "node scripts/update-readme-link.cjs",
-        "postversion": "git push --follow-tags"
+    "prepublishOnly": "node scripts/update-readme-link.cjs"
   },
   "files": [
     "src",
@@ -24,9 +23,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com"
-  },
-  "scripts": {
-    "prepublishOnly": "node scripts/update-readme-link.cjs"
   },
   "keywords": [
     "undo",
