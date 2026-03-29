@@ -114,8 +114,13 @@
         } catch (e) {
           console.error(e);
           document.body.innerHTML = `
-    <p>Error resolving documentation.</p>
-    <p><a href="https://github.com/${repo}/blob/main/README.md">Go to latest documentation</a></p>
+    <h2>Documentation resolver not ready</h2>
+    <p>
+      This package may not yet be published on npm, or its npm metadata is not yet available.
+    </p>
+    <p>
+      <a href="https://github.com/${repo}/blob/main/README.md">Latest documentation</a>
+    </p>
   `;
         }
       }
