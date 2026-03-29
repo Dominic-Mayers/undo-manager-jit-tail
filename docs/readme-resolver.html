@@ -43,10 +43,16 @@
           const data = await res.json();
           const versions = Object.keys(data.versions).sort(compareVersions);
 
+
           if (mode === "last") {
             const nextVersion = versions.find(
               (v) => compareVersions(v, version) > 0,
             );
+
+console.log({ repo, npmPackage, version, mode });
+console.log("versions:", versions);
+const nextVersion = versions.find(v => compareVersions(v, version) > 0);
+console.log("nextVersion:", nextVersion);
 
             // Core rule: if the version ahead does not exist, redirect to main
             if (!nextVersion) {
