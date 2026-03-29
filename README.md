@@ -21,9 +21,9 @@ The demo is the best way to understand the module.
 
 Try this:
 
-1. Perform several small changes
-2. Press **Undo**
-3. Observe that a **single checkpoint is created** for all previous minor changes
+1. Perform several small changes.
+2. Press **Undo**.
+3. Observe that a **single checkpoint is created** for all previous minor changes.
 
 The demo also allows switching between:
 
