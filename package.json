@@ -17,14 +17,14 @@
     "version": "node scripts/update-readme-link.cjs && git add README.md",
     "postversion": "git push --follow-tags"
   },
-  "files": [
-    "src",
-    "README.md"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Dominic-Mayers/undo-manager-jit-tail"
   },
+  "files": [
+    "src",
+    "README.md"
+  ],
   "keywords": [
     "undo",
     "undo-manager",
