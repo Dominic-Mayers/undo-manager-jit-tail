@@ -47,6 +47,7 @@
       "repositoryBrowserUrl": "https://github.com/Dominic-Mayers/undo-manager-jit-tail"
     },
     "packageFilePath": "README.md",
-    "repositoryUrlPath": ""
+    "repositoryUrlPath": "",
+    "nextContract": "until-successor-of"
   }
 }
