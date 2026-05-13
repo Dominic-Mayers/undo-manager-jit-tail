@@ -14,8 +14,9 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "version": "node scripts/update-readme-link.cjs && git add README.md",
-    "postversion": "git push --follow-tags"
+    "version": "last-of-readme attempt-readme-link && git add README.md",
+    "postversion": "git push --follow-tags",
+    "preversion": "last-of-readme attempt-check-contract && last-of-readme attempt-successor-tag"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,17 @@
   "author": "Dominic Mayers",
   "license": "ISC",
   "dependencies": {
-    "@dominic.mayers/last-of-readme": "^0.1.64",
+    "@dominic.mayers/last-of-readme": "^0.1.68",
     "undo-manager": "^1.1.1"
+  },
+  "lastOfReadme": {
+    "remoteName": "origin",
+    "remote": {
+      "kind": "github",
+      "repositoryApiUrl": "https://api.github.com/repos/Dominic-Mayers/undo-manager-jit-tail",
+      "repositoryBrowserUrl": "https://github.com/Dominic-Mayers/undo-manager-jit-tail"
+    },
+    "packageFilePath": "README.md",
+    "repositoryUrlPath": ""
   }
 }
