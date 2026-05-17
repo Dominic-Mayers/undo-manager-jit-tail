@@ -50,6 +50,6 @@
     "nextContract": "until-branch"
   },
   "devDependencies": {
-    "@dominic.mayers/last-of-readme": "^0.1.76"
+    "@dominic.mayers/last-of-readme": "^0.1.78"
   }
 }
