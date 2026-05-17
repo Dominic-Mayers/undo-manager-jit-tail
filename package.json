@@ -47,7 +47,7 @@
     },
     "packageFilePath": "README.md",
     "repositoryUrlPath": "",
-    "nextContract": "until-branch"
+    "nextContract": "until-next"
   },
   "devDependencies": {
     "@dominic.mayers/last-of-readme": "^0.1.78"
